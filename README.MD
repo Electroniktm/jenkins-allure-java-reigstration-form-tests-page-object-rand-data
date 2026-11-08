@@ -4,9 +4,10 @@
 [![Selenide](https://img.shields.io/badge/Selenide-7.16.2-blue.svg)](https://selenide.org/)
 [![JUnit 5](https://img.shields.io/badge/JUnit-5-green.svg)](https://junit.org/junit5/)
 [![JavaFaker](https://img.shields.io/badge/JavaFaker-1.0.2-purple.svg)](https://github.com/BrunoBonacci/java-faker)
-[![Chrome](https://img.shields.io/badge/Браузер-Chrome-lightgrey.svg)](https://www.google.com/chrome/)
+[![Allure](https://img.shields.io/badge/Allure-2.32.0-red.svg)](https://allurereport.org/)
+[![Jenkins](https://img.shields.io/badge/Jenkins-CI-blue.svg)](https://www.jenkins.io/)
 
-> UI-автоматизация веб-форм [DemoQA](https://demoqa.com) на Selenide и JUnit 5 с генерацией случайных данных через JavaFaker. (обновлено 07.11.2026)
+> UI-автоматизация веб-форм [DemoQA](https://demoqa.com) на Selenide и JUnit 5 с генерацией случайных данных через JavaFaker, отчётностью Allure Reports и запуском в Jenkins. (обновлено 08.11.2026)
 
 ---
 
@@ -21,6 +22,7 @@
 - [Запуск тестов](#запуск-тестов)
 - [Принятые решения](#принятые-решения)
 - [Лучшие практики](#лучшие-практики)
+- [CI/CD (Jenkins)](#cicd-jenkins)
 
 ---
 
@@ -43,8 +45,9 @@
 | **Тестовый фреймворк** | JUnit Jupiter | 5.11.4 |
 | **Обёртка Selenium** | Selenide | 7.16.2 |
 | **Генерация данных** | JavaFaker | 1.0.2 |
+| **Отчётность** | Allure Reports | 2.32.0 (allure-selenide) |
 | **Сборка** | Gradle | 9.3.0 |
-| **Браузер** | Chrome | Актуальная |
+| **Браузер** | Chrome | В облачном Selenoid (`selenoid.qa.guru`) |
 
 ---
 
@@ -157,14 +160,14 @@ public String randomCity(String state) {
 ### Требования
 
 - **Java Development Kit (JDK)** 17 или выше
-- **Chrome Browser** (актуальная версия)
 - **Gradle** 9.3+ (или используйте встроенный wrapper)
+- Локальный Chrome **не требуется**: браузер запускается в облачном Selenoid (`selenoid.qa.guru`)
 
 ### Установка
 
 ```bash
-git clone https://github.com/Electroniktm/java-reigstration-form-tests-page-object-rand-data.git
-cd java-reigstration-form-tests-page-object-rand-data
+git clone https://github.com/Electroniktm/jenkins-allure-java-reigstration-form-tests-page-object-rand-data.git
+cd jenkins-allure-java-reigstration-form-tests-page-object-rand-data
 ```
 
 ---
@@ -308,7 +311,35 @@ uploadPicture.uploadFromClasspath("test.png");
 Configuration.browserSize = "1920x1280";
 Configuration.browser = "chrome";
 Configuration.baseUrl = "https://demoqa.com";
+// браузер запускается в облачном Selenoid, версия не фиксируется —
+// хаб использует пул слотов и отдаёт доступную версию Chrome
+Configuration.remote = "https://user1:1234@selenoid.qa.guru/wd/hub";
 ```
+
+Слушатель `AllureSelenide` (скриншоты + исходник страницы при падении) подключается в каждом тесте:
+
+```java
+@BeforeEach
+void addListener() {
+    SelenideLogger.addListener("AllureSelenide",
+            new AllureSelenide().screenshots(true).savePageSource(true));
+}
+```
+
+---
+
+## 🏗 CI/CD (Jenkins)
+
+Сборка прогоняется в Jenkins: git-склонирование репозитория → `gradle clean test` → публикация отчёта Allure.
+
+| Параметр | Значение |
+|------|------|
+| **SCM** | `https://github.com/Electroniktm/jenkins-allure-java-reigstration-form-tests-page-object-rand-data.git`, ветка `main` |
+| **Агент** | нода с меткой `java` (JDK 21) |
+| **Gradle** | установленный в Jenkins `Gradle 8.6`, флаг `--no-daemon`, задачи `clean test` |
+| **Allure** | плагин allure-jenkins-plugin, результаты из `build/allure-results`, отчёт собирается всегда (`ALWAYS`) |
+
+Результаты тестов пишутся в `build/allure-results` (плагин `io.qameta.allure` + адаптер JUnit 5 + AspectJ-weave для автоматических шагов), а Jenkins собирает из них интерактивный отчёт, доступный по ссылке `<job>/allure/`.
 
 ---
 

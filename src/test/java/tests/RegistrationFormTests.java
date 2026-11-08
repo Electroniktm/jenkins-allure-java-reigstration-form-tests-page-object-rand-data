@@ -1,11 +1,13 @@
 package tests;
 
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import pages.RegistrationFormPage;
 import utils.FakeDataProvider;
 
 import static testdata.TestData.*;
 
+@Story("Registration form")
 public class RegistrationFormTests extends TestBase {
 
     private final RegistrationFormPage registrationFormPage = new RegistrationFormPage();

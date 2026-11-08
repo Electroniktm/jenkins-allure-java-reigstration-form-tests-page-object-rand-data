@@ -1,11 +1,13 @@
 package tests;
 
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.Test;
 import pages.TextBoxPage;
 import utils.FakeDataProvider;
 
 import static testdata.TestData.*;
 
+@Story("Text Box")
 public class TextBoxTests extends TestBase {
 
     private final TextBoxPage textBoxPage = new TextBoxPage();

@@ -6,14 +6,6 @@ out/
 .gradle/
 gradle-app.setting
 
-# Gradle wrapper
-gradle/wrapper/*.jar
-gradle/wrapper/gradle-wrapper.properties
-
-# Gradlew
-gradlew
-gradlew.bat
-
 # IDE
 .idea/
 .vscode/
@@ -32,6 +24,9 @@ build/test-results/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local scratch (scraped pages, probes)
+.firecrawl/
 
 # Secrets and credentials
 *.keystore
