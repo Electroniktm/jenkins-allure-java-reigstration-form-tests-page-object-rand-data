@@ -49,3 +49,7 @@ src/test/java/tests/DumpDropdownOptions.java
 src/test/java/tests/DumpPageHtml.java
 src/test/java/tests/ExtendedLoginTests.java
 src/test/java/tests/LoginTests.java
+# Gradle wrapper (not committed)
+gradlew
+gradlew.bat
+gradle/wrapper/
