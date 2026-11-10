@@ -58,8 +58,6 @@ java-reigstration-form-tests-page-object-rand-data/
 ├── build.gradle                          # Конфигурация сборки и зависимости
 ├── README.MD                             # Этот файл
 ├── LICENSE                               # Лицензия
-├── gradle/
-│   └── wrapper/                          # Файлы Gradle wrapper
 └── src/
     └── test/
         ├── java/
@@ -160,7 +158,7 @@ public String randomCity(String state) {
 ### Требования
 
 - **Java Development Kit (JDK)** 17 или выше
-- **Gradle** 9.3+ (или используйте встроенный wrapper)
+- **Gradle** 9.3+ (установленный локально; Gradle wrapper в репозиторий не коммитится)
 - Локальный Chrome **не требуется**: браузер запускается в облачном Selenoid (`selenoid.qa.guru`)
 
 ### Установка
@@ -177,26 +175,26 @@ cd jenkins-allure-java-reigstration-form-tests-page-object-rand-data
 ### Запуск всех тестов
 
 ```bash
-.\gradlew.bat test
+gradle test
 ```
 
 ### Запуск конкретного класса тестов
 
 ```bash
-.\gradlew.bat test --tests "tests.RegistrationFormTests"
-.\gradlew.bat test --tests "tests.TextBoxTests"
+gradle test --tests "tests.RegistrationFormTests"
+gradle test --tests "tests.TextBoxTests"
 ```
 
 ### Запуск конкретного метода
 
 ```bash
-.\gradlew.bat test --tests "tests.RegistrationFormTests.fillAllFieldsAndSubmitTest"
+gradle test --tests "tests.RegistrationFormTests.fillAllFieldsAndSubmitTest"
 ```
 
 ### Запуск с подробным выводом
 
 ```bash
-.\gradlew.bat test --info
+gradle test --info
 ```
 
 ---
